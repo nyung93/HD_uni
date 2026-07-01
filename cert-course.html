@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>교과영역 관리 — W.H.Y 리셋학기 마일리지 관리시스템</title>
+  <link rel="stylesheet" href="_tokens.css">
+  <link rel="stylesheet" href="_layout.css">
+  <style>
+    .cert-target-check {
+      accent-color: var(--color-primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    /* iframe 임베드 모드: topbar·sidebar 숨김 */
+    .is-embedded .topbar,
+    .is-embedded .sidebar { display: none !important; }
+    .is-embedded .content {
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<script>
+  if (window !== window.parent || new URLSearchParams(location.search).get('embedded') === '1') {
+    document.documentElement.classList.add('is-embedded');
+  }
+</script>
+
+<!-- ===== TopBar ===== -->
+<header class="topbar">
+  <div class="topbar__logo">
+    <div class="topbar__logo-mark">WHY</div>
+    <span class="topbar__title">한동대학교 W.H.Y 리셋학기 마일리지 관리시스템</span>
+  </div>
+  <div class="topbar__right">
+    <div class="topbar__user">
+      <span class="role-badge role-badge--adm">ADM</span>
+      <span class="topbar__user-name">관리자 홍길동</span>
+    </div>
+    <button class="topbar__logout" onclick="alert('로그아웃')">로그아웃</button>
+  </div>
+</header>
+
+<!-- ===== Sidebar ===== -->
+<nav class="sidebar">
+  <a href="index.html" class="sidebar__nav-link" style="display:flex; align-items:center; gap:8px; padding: 10px 16px; margin: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--color-text-secondary);">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+    홈
+  </a>
+  <span class="sidebar__section-label">인증제 운영관리</span>
+  <ul class="sidebar__nav">
+    <li class="sidebar__nav-item">
+      <a href="cert-course.html" class="sidebar__nav-link is-active">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.694.358 3.8 1.006A7.968 7.968 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+        </svg>
+        교과영역
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="cert-extracur.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+        </svg>
+        비교과영역
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="cert-standard.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/>
+        </svg>
+        인증기준
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="target.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+        </svg>
+        대상자 관리
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- ===== Main Content ===== -->
+<main class="content">
+
+  <!-- 페이지 헤더 -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">교과영역 관리</h1>
+      <p class="page-subtitle">2025년도 교과목 매핑 및 인증대상 설정</p>
+    </div>
+    <span class="badge badge--info" style="font-size: var(--font-size-base); padding: var(--spacing-2) var(--spacing-4);">2025년도</span>
+  </div>
+
+  <!-- 검색 조건 카드 -->
+  <div class="card section-gap">
+    <div class="card__body">
+      <form class="search-row" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label">년도</label>
+          <select class="form-select" style="width: 90px;">
+            <option>2025</option>
+            <option>2024</option>
+            <option>2023</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">학기</label>
+          <select class="form-select" style="width: 100px;">
+            <option>전체</option>
+            <option selected>1학기</option>
+            <option>2학기</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">교과목코드</label>
+          <input type="text" class="form-input" placeholder="예) CS101" style="width: 130px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">교과목명</label>
+          <input type="text" class="form-input" placeholder="교과목명 검색" style="width: 180px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">영역구분</label>
+          <select class="form-select" style="width: 130px;">
+            <option>전체</option>
+            <option>Academic</option>
+            <option>Learning</option>
+            <option>Spiritual</option>
+            <option>Service</option>
+            <option>Knowing</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex-direction: row; align-items: flex-end; gap: var(--spacing-2);">
+          <input type="checkbox" class="form-checkbox" id="certTargetOnly">
+          <label for="certTargetOnly" class="form-label" style="cursor: pointer; white-space: nowrap;">인증대상교과목만</label>
+        </div>
+        <div class="form-group" style="justify-content: flex-end;">
+          <label class="form-label" style="visibility: hidden;">조회</label>
+          <button type="submit" class="btn btn--primary">조회</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 액션 버튼 행 -->
+  <div class="flex-between mb-4">
+    <div></div>
+    <div class="btn-group">
+      <button class="btn btn--secondary" onclick="alert('전년도(2024년) 데이터를 복사합니다. 이미 매핑된 교과목은 덮어씁니다.')">전년도 복사</button>
+      <button class="btn btn--secondary" onclick="openExcelModal()">엑셀 일괄등록</button>
+    </div>
+  </div>
+
+  <!-- 교과목 목록 테이블 -->
+  <div class="card section-gap">
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 60px;" class="center">년도</th>
+            <th style="width: 70px;" class="center">학기</th>
+            <th style="width: 100px;">교과목코드</th>
+            <th style="width: 90px;">이수구분</th>
+            <th style="width: 210px;">교과목명</th>
+            <th style="width: 110px;" class="center">영역</th>
+            <th style="width: 130px;">활동명</th>
+            <th style="width: 60px;" class="center">배점</th>
+            <th style="width: 80px;" class="center">인증대상</th>
+            <th style="width: 100px;" class="center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">1학기</td>
+            <td><strong>CS101</strong></td>
+            <td>전공필수</td>
+            <td>기독교세계관(F-GBS)</td>
+            <td class="center"><span class="badge badge--academic">ACADEMIC</span></td>
+            <td>기독교세계관</td>
+            <td class="center">10</td>
+            <td class="center"><input type="checkbox" class="cert-target-check" checked></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('기독교세계관(F-GBS)', 'CS101', 'academic', '기독교세계관', 10, 4)">영역설정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">1학기</td>
+            <td><strong>CS201</strong></td>
+            <td>전공선택</td>
+            <td>소프트웨어공학</td>
+            <td class="center"><span class="badge badge--learning">LEARNING</span></td>
+            <td>소프트웨어개발</td>
+            <td class="center">8</td>
+            <td class="center"><input type="checkbox" class="cert-target-check" checked></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('소프트웨어공학', 'CS201', 'learning', '소프트웨어개발', 8, 0)">영역설정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">1학기</td>
+            <td><strong>LNG101</strong></td>
+            <td>교양필수</td>
+            <td>영어회화</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td><span class="text-muted text-sm">—</span></td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center"><input type="checkbox" class="cert-target-check"></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('영어회화', 'LNG101', '', '', '', '')">영역설정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">1학기</td>
+            <td><strong>PFS201</strong></td>
+            <td>전공필수</td>
+            <td>전공기초실습(PFS)</td>
+            <td class="center"><span class="badge badge--service">SERVICE</span></td>
+            <td>현장봉사</td>
+            <td class="center">12</td>
+            <td class="center"><input type="checkbox" class="cert-target-check" checked></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('전공기초실습(PFS)', 'PFS201', 'service', '현장봉사', 12, 2)">영역설정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">2학기</td>
+            <td><strong>JSU301</strong></td>
+            <td>전공선택</td>
+            <td>지역사회봉사(JSU)</td>
+            <td class="center"><span class="badge badge--service">SERVICE</span></td>
+            <td>지역봉사</td>
+            <td class="center">10</td>
+            <td class="center"><input type="checkbox" class="cert-target-check" checked></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('지역사회봉사(JSU)', 'JSU301', 'service', '지역봉사', 10, 2)">영역설정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">1학기</td>
+            <td><strong>MTH102</strong></td>
+            <td>교양선택</td>
+            <td>수리통계학</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td><span class="text-muted text-sm">—</span></td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center"><input type="checkbox" class="cert-target-check"></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('수리통계학', 'MTH102', '', '', '', '')">영역설정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2025</td>
+            <td class="center">2학기</td>
+            <td><strong>THE101</strong></td>
+            <td>전공필수</td>
+            <td>조직신학개론</td>
+            <td class="center"><span class="badge badge--spiritual">SPIRITUAL</span></td>
+            <td>경건의시간</td>
+            <td class="center">5</td>
+            <td class="center"><input type="checkbox" class="cert-target-check" checked></td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="openAreaModal('조직신학개론', 'THE101', 'spiritual', '경건의시간', 5, 4)">영역설정</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination">
+    <button class="pagination__btn" disabled>&#8249;</button>
+    <button class="pagination__btn is-active">1</button>
+    <button class="pagination__btn">2</button>
+    <button class="pagination__btn">3</button>
+    <button class="pagination__btn">&#8250;</button>
+    <span class="pagination__info">총 56개 교과목 / 페이지당 20개</span>
+  </div>
+
+</main>
+
+<!-- ===================================================
+     모달: 영역설정 팝업 (WF-CERT-002)
+     =================================================== -->
+<div class="modal-overlay" id="areaModalOverlay">
+  <div class="modal modal--sm">
+    <header class="modal__header">
+      <span class="modal__title">영역설정</span>
+      <button class="modal__close" onclick="closeAreaModal()" aria-label="닫기">&times;</button>
+    </header>
+    <div class="modal__body">
+
+      <!-- 상태 배지 영역 (선택된 상태에 따라) -->
+      <div id="areaModalStatus" class="mb-4"></div>
+
+      <!-- 교과목 (읽기전용) -->
+      <div class="modal-form-row">
+        <label class="form-label">교과목</label>
+        <div>
+          <input type="text" class="form-input" id="areaModalSubjNm" disabled
+            style="background: var(--input-bg-disabled); color: var(--input-text-disabled);">
+          <div class="text-xs text-muted mt-3" id="areaModalSubjCd"></div>
+        </div>
+      </div>
+
+      <!-- 컴패스 영역 선택 -->
+      <div class="modal-form-row">
+        <label class="form-label form-label--required">컴패스 영역</label>
+        <div class="radio-group" id="areaRadioGroup">
+          <label class="radio-label">
+            <input type="radio" name="areaCompass" value="academic" onchange="onCompassChange(this.value)">
+            <span style="color: var(--compass-academic-text); font-weight: var(--font-weight-semibold);">Academic</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="areaCompass" value="learning" onchange="onCompassChange(this.value)">
+            <span style="color: var(--compass-learning-text); font-weight: var(--font-weight-semibold);">Learning</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="areaCompass" value="spiritual" onchange="onCompassChange(this.value)">
+            <span style="color: var(--compass-spiritual-text); font-weight: var(--font-weight-semibold);">Spiritual</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="areaCompass" value="service" onchange="onCompassChange(this.value)">
+            <span style="color: var(--compass-service-text); font-weight: var(--font-weight-semibold);">Service</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="areaCompass" value="knowing" onchange="onCompassChange(this.value)">
+            <span style="color: var(--compass-knowing-text); font-weight: var(--font-weight-semibold);">Knowing</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 활동명 -->
+      <div class="modal-form-row">
+        <label class="form-label form-label--required">활동명</label>
+        <select class="form-select" id="areaActNmSelect" onchange="onActNmChange(this.value)">
+          <option value="">선택해주세요</option>
+        </select>
+      </div>
+
+      <!-- 배점 (읽기전용) -->
+      <div class="modal-form-row">
+        <label class="form-label">배점</label>
+        <input type="text" class="form-input" id="areaModalPts" disabled placeholder="활동명 선택 후 자동 표시"
+          style="background: var(--input-bg-disabled); color: var(--input-text-disabled);">
+      </div>
+
+      <!-- 최대횟수 (읽기전용) -->
+      <div class="modal-form-row">
+        <label class="form-label">최대횟수/년</label>
+        <input type="text" class="form-input" id="areaModalMaxCnt" disabled placeholder="활동명 선택 후 자동 표시"
+          style="background: var(--input-bg-disabled); color: var(--input-text-disabled);">
+      </div>
+
+    </div>
+    <footer class="modal__footer">
+      <button class="btn btn--secondary" onclick="closeAreaModal()">취소</button>
+      <button class="btn btn--primary" onclick="saveAreaModal()">저장</button>
+    </footer>
+  </div>
+</div>
+
+<!-- ===================================================
+     모달: 엑셀 일괄등록 팝업
+     =================================================== -->
+<div class="modal-overlay" id="excelModalOverlay">
+  <div class="modal modal--sm">
+    <header class="modal__header">
+      <span class="modal__title">엑셀 일괄등록</span>
+      <button class="modal__close" onclick="closeExcelModal()" aria-label="닫기">&times;</button>
+    </header>
+    <div class="modal__body">
+
+      <div class="info-banner mb-4">
+        <span>&#8505;</span>
+        <span>시스템 제공 양식(xlsx)만 업로드 가능합니다. 파일 최대 크기: <strong>10MB</strong></span>
+      </div>
+
+      <!-- 드롭존 -->
+      <div class="dropzone" id="dropzone"
+        onclick="document.getElementById('fileInput').click()"
+        ondragover="event.preventDefault(); this.classList.add('is-dragover')"
+        ondragleave="this.classList.remove('is-dragover')"
+        ondrop="handleDrop(event)">
+        <div class="dropzone__icon">&#128196;</div>
+        <p class="dropzone__text">파일을 여기에 드래그하거나 클릭하여 선택하세요</p>
+        <p class="dropzone__hint">.xlsx 파일만 지원 · 최대 10MB</p>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFileSelect(event)">
+
+      <div id="selectedFileName" class="text-sm text-muted mt-3" style="display:none;"></div>
+
+      <div class="mt-4">
+        <button class="btn btn--secondary btn--sm" onclick="alert('양식 파일 다운로드 시작')">
+          &#11015; 양식 다운로드
+        </button>
+      </div>
+
+    </div>
+    <footer class="modal__footer">
+      <button class="btn btn--secondary" onclick="closeExcelModal()">취소</button>
+      <button class="btn btn--primary" onclick="uploadExcel()">업로드</button>
+    </footer>
+  </div>
+</div>
+
+<script>
+  /* ======================================================
+     영역별 활동명 데이터 (인증기준 연동 시뮬레이션)
+     ====================================================== */
+  const activityData = {
+    academic:  [{ nm: '기독교세계관', pts: 10, max: 4 }, { nm: '전공기초실습', pts: 12, max: 2 }],
+    learning:  [{ nm: '소프트웨어개발', pts: 8, max: 0 }, { nm: '독서', pts: 10, max: 4 }, { nm: '글쓰기', pts: 5, max: 4 }],
+    spiritual: [{ nm: '경건의시간', pts: 5, max: 4 }, { nm: '수련회참가', pts: 20, max: 1 }],
+    service:   [{ nm: '현장봉사', pts: 12, max: 2 }, { nm: '지역봉사', pts: 10, max: 2 }, { nm: '해외봉사', pts: 25, max: 1 }],
+    knowing:   [{ nm: '진로탐색', pts: 8, max: 4 }, { nm: '자기이해', pts: 5, max: 4 }]
+  };
+
+  /* ======================================================
+     영역설정 모달
+     ====================================================== */
+  function openAreaModal(subjNm, subjCd, compass, actNm, pts, maxCnt) {
+    document.getElementById('areaModalSubjNm').value = subjNm;
+    document.getElementById('areaModalSubjCd').textContent = '교과목코드: ' + subjCd;
+    document.getElementById('areaModalPts').value = pts !== '' ? pts + '점' : '';
+    document.getElementById('areaModalMaxCnt').value = maxCnt !== '' ? (maxCnt === 0 ? '무제한' : maxCnt + '회') : '';
+
+    // 기존 영역 상태 배지
+    var statusEl = document.getElementById('areaModalStatus');
+    if (compass) {
+      statusEl.innerHTML = '<span class="badge" style="background: var(--status-new-bg); color: var(--status-new-text);">기존 매핑 있음 — 수정 가능</span>';
+    } else {
+      statusEl.innerHTML = '<span class="badge" style="background: var(--color-bg-disabled); color: var(--color-text-secondary);">미매핑 — 신규 설정</span>';
+    }
+
+    // 라디오 초기화
+    var radios = document.querySelectorAll('input[name="areaCompass"]');
+    radios.forEach(function(r) {
+      r.checked = (r.value === compass);
+    });
+
+    // 활동명 목록 초기화 및 설정
+    if (compass) {
+      populateActNm(compass, actNm);
+    } else {
+      var sel = document.getElementById('areaActNmSelect');
+      sel.innerHTML = '<option value="">선택해주세요</option>';
+    }
+
+    document.getElementById('areaModalOverlay').classList.add('is-open');
+  }
+
+  function closeAreaModal() {
+    document.getElementById('areaModalOverlay').classList.remove('is-open');
+  }
+
+  function onCompassChange(val) {
+    populateActNm(val, '');
+    document.getElementById('areaModalPts').value = '';
+    document.getElementById('areaModalMaxCnt').value = '';
+  }
+
+  function populateActNm(compass, selectedNm) {
+    var sel = document.getElementById('areaActNmSelect');
+    sel.innerHTML = '<option value="">선택해주세요</option>';
+    var list = activityData[compass] || [];
+    list.forEach(function(item) {
+      var opt = document.createElement('option');
+      opt.value = item.nm;
+      opt.dataset.pts = item.pts;
+      opt.dataset.max = item.max;
+      opt.textContent = item.nm;
+      if (item.nm === selectedNm) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    // 기존값이 있으면 배점/최대횟수 표시
+    if (selectedNm) {
+      var found = list.find(function(i) { return i.nm === selectedNm; });
+      if (found) {
+        document.getElementById('areaModalPts').value = found.pts + '점';
+        document.getElementById('areaModalMaxCnt').value = found.max === 0 ? '무제한' : found.max + '회';
+      }
+    }
+  }
+
+  function onActNmChange(nm) {
+    var sel = document.getElementById('areaActNmSelect');
+    var opt = sel.querySelector('option[value="' + nm + '"]');
+    if (opt) {
+      document.getElementById('areaModalPts').value = opt.dataset.pts + '점';
+      document.getElementById('areaModalMaxCnt').value = opt.dataset.max === '0' ? '무제한' : opt.dataset.max + '회';
+    } else {
+      document.getElementById('areaModalPts').value = '';
+      document.getElementById('areaModalMaxCnt').value = '';
+    }
+  }
+
+  function saveAreaModal() {
+    var radios = document.querySelectorAll('input[name="areaCompass"]');
+    var selected = Array.from(radios).find(function(r) { return r.checked; });
+    var actNm = document.getElementById('areaActNmSelect').value;
+
+    if (!selected) {
+      alert('컴패스 영역을 선택해주세요.');
+      return;
+    }
+    if (!actNm) {
+      alert('활동명을 선택해주세요.');
+      return;
+    }
+    alert('저장 완료: ' + selected.value + ' — ' + actNm);
+    closeAreaModal();
+  }
+
+  /* ======================================================
+     엑셀 모달
+     ====================================================== */
+  function openExcelModal() {
+    document.getElementById('excelModalOverlay').classList.add('is-open');
+  }
+
+  function closeExcelModal() {
+    document.getElementById('excelModalOverlay').classList.remove('is-open');
+    document.getElementById('selectedFileName').style.display = 'none';
+    document.getElementById('selectedFileName').textContent = '';
+    document.getElementById('fileInput').value = '';
+  }
+
+  function handleFileSelect(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    showSelectedFile(file);
+  }
+
+  function handleDrop(event) {
+    event.preventDefault();
+    document.getElementById('dropzone').classList.remove('is-dragover');
+    var file = event.dataTransfer.files[0];
+    if (file) showSelectedFile(file);
+  }
+
+  function showSelectedFile(file) {
+    var el = document.getElementById('selectedFileName');
+    el.textContent = '선택된 파일: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + 'KB)';
+    el.style.display = 'block';
+  }
+
+  function uploadExcel() {
+    var file = document.getElementById('fileInput').files[0];
+    if (!file) {
+      alert('업로드할 파일을 선택해주세요.');
+      return;
+    }
+    alert('업로드 완료: 성공 5건 / 실패 0건');
+    closeExcelModal();
+  }
+
+  /* ESC 키로 모달 닫기 */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeAreaModal();
+      closeExcelModal();
+    }
+  });
+</script>
+
+</body>
+</html>

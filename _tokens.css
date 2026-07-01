@@ -1,0 +1,380 @@
+/*
+  _tokens.css
+  HD 프로젝트 — W.H.Y 리셋학기 마일리지 관리시스템
+  UI-TOKENS.md v1.0.0 기반 CSS Custom Properties
+  모든 색상·크기·간격은 이 파일의 변수를 참조한다. 하드코딩 금지.
+*/
+
+:root {
+  /* ============================================================
+     1. 브랜드 컬러 (Brand Colors)
+     ============================================================ */
+  --color-primary:            #003087;
+  --color-primary-hover:      #001F5B;
+  --color-primary-light:      #1A4FB0;
+  --color-accent:             #0066CC;
+  --color-gold:               #C8962A;
+  --color-secondary:          #475569;
+  --color-surface:            #FFFFFF;
+
+  /* ============================================================
+     2. 컴패스 영역 색상 (Compass Domain Colors)
+     ============================================================ */
+  /* Academic */
+  --compass-academic:           #003087;
+  --compass-academic-bg:        #E8EDF7;
+  --compass-academic-text:      #001F5B;
+
+  /* Learning */
+  --compass-learning:           #0A7EA4;
+  --compass-learning-bg:        #E8F4F8;
+  --compass-learning-text:      #065A76;
+
+  /* Spiritual */
+  --compass-spiritual:          #6B48C3;
+  --compass-spiritual-bg:       #F0ECFA;
+  --compass-spiritual-text:     #4A2E9A;
+
+  /* Service */
+  --compass-service:            #C84B31;
+  --compass-service-bg:         #FAEAE7;
+  --compass-service-text:       #922F1E;
+
+  /* Knowing */
+  --compass-knowing:            #2E7D52;
+  --compass-knowing-bg:         #E8F5EE;
+  --compass-knowing-text:       #1C5234;
+
+  /* ============================================================
+     3. 관리자 레이아웃 색상 (Admin Layout Colors)
+     ============================================================ */
+  --admin-topbar-bg:            #1B2A4A;
+  --admin-topbar-text:          #FFFFFF;
+  --admin-topbar-border:        #2D3F63;
+  --admin-sidebar-bg:           #FFFFFF;
+  --admin-sidebar-border:       #E2E8F0;
+  --admin-sidebar-active-bg:    #EBF0F8;
+  --admin-sidebar-active-text:  #003087;
+  --admin-sidebar-active-border:#003087;
+  --admin-sidebar-hover-bg:     #F5F7FA;
+  --admin-sidebar-text:         #374151;
+  --admin-content-bg:           #F5F7FA;
+  --admin-card-bg:              #FFFFFF;
+  --admin-card-border:          #E2E8F0;
+  --admin-card-shadow:          0 1px 3px rgba(0,0,0,0.08);
+
+  /* ============================================================
+     4. 중립 색상 (Neutral Colors)
+     ============================================================ */
+  --neutral-900:  #111827;
+  --neutral-700:  #374151;
+  --neutral-500:  #6B7280;
+  --neutral-400:  #9CA3AF;
+  --neutral-300:  #D1D5DB;
+  --neutral-200:  #E5E7EB;
+  --neutral-100:  #F3F4F6;
+  --neutral-50:   #F9FAFB;
+
+  /* ============================================================
+     5. 의미론적 텍스트·배경 색상 (Semantic Colors)
+     ============================================================ */
+  --color-text-primary:       #374151;
+  --color-text-secondary:     #6B7280;
+  --color-text-disabled:      #9CA3AF;
+  --color-text-heading:       #111827;
+  --color-text-strikethrough: #9CA3AF;
+
+  --color-bg-page:            #F5F7FA;
+  --color-bg-card:            #FFFFFF;
+  --color-bg-disabled:        #F3F4F6;
+  --color-bg-section:         #EFF2F7;
+  --color-bg-info:            #EBF4FF;
+
+  --color-border:             #D1D5DB;
+  --color-border-focus:       #003087;
+  --color-border-error:       #EF4444;
+  --color-border-section:     #E2E8F0;
+
+  /* ============================================================
+     6. 상태 색상 (Status Colors)
+     ============================================================ */
+  /* 인증 */
+  --status-certified:          #059669;
+  --status-certified-bg:       #ECFDF5;
+  --status-certified-text:     #047857;
+
+  /* 미인증 */
+  --status-not-certified:      #6B7280;
+  --status-not-certified-bg:   #F3F4F6;
+  --status-not-certified-text: #4B5563;
+
+  /* 잠금 */
+  --status-locked:             #DC2626;
+  --status-locked-bg:          #FEF2F2;
+  --status-locked-text:        #B91C1C;
+
+  /* 신규/이력없음 */
+  --status-new:                #059669;
+  --status-new-bg:             #ECFDF5;
+  --status-new-text:           #047857;
+
+  /* 출결 FAIL 위험 */
+  --status-fail-risk:          #D97706;
+  --status-fail-risk-bg:       #FFFBEB;
+  --status-fail-risk-text:     #B45309;
+
+  /* 예상 마일리지 미달 */
+  --status-pred-lack:          #7C3AED;
+  --status-pred-lack-bg:       #F5F3FF;
+  --status-pred-lack-text:     #5B21B6;
+
+  /* 경고 */
+  --status-warning:            #F59E0B;
+  --status-warning-bg:         #FFFBEB;
+  --status-warning-text:       #92400E;
+
+  /* 오류 */
+  --status-error:              #EF4444;
+  --status-error-bg:           #FEF2F2;
+  --status-error-text:         #B91C1C;
+
+  /* 성공 */
+  --status-success:            #10B981;
+  --status-success-bg:         #ECFDF5;
+  --status-success-text:       #047857;
+
+  /* 별칭 (WF 문서 호환) */
+  --color-danger:              #EF4444;
+  --color-success:             #10B981;
+  --color-warning:             #F59E0B;
+
+  /* ============================================================
+     7. 타이포그래피 (Typography)
+     ============================================================ */
+  --font-family:        'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --font-size-xs:       12px;
+  --font-size-sm:       13px;
+  --font-size-base:     14px;
+  --font-size-md:       15px;
+  --font-size-lg:       16px;
+  --font-size-xl:       18px;
+  --font-size-2xl:      20px;
+  --font-size-3xl:      24px;
+
+  --font-weight-regular:   400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+
+  --line-height-tight:   1.3;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.75;
+
+  /* ============================================================
+     8. 간격 (Spacing)
+     ============================================================ */
+  --spacing-1:   4px;
+  --spacing-2:   8px;
+  --spacing-3:   12px;
+  --spacing-4:   16px;
+  --spacing-5:   20px;
+  --spacing-6:   24px;
+  --spacing-8:   32px;
+  --spacing-10:  40px;
+  --spacing-12:  48px;
+
+  /* ============================================================
+     9. 테두리 반경 (Border Radius)
+     ============================================================ */
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-lg:    8px;
+  --radius-xl:    12px;
+  --radius-full:  9999px;
+
+  /* ============================================================
+     9-2. 그림자 (Shadows)
+     ============================================================ */
+  --shadow-card:     0 1px 3px rgba(0,0,0,0.08);
+  --shadow-dropdown: 0 4px 12px rgba(0,0,0,0.12);
+  --shadow-modal:    0 10px 40px rgba(0,0,0,0.15);
+  --shadow-overlay:  rgba(0,0,0,0.45);
+  --shadow-toast:    0 4px 16px rgba(0,0,0,0.14);
+
+  /* ============================================================
+     9-3. Z-index
+     ============================================================ */
+  --z-sidebar:        100;
+  --z-topbar:         200;
+  --z-modal-overlay:  300;
+  --z-modal:          301;
+  --z-toast:          400;
+  --z-tooltip:        500;
+  --z-dropdown:       150;
+
+  /* ============================================================
+     10. 레이아웃 치수 (Layout Dimensions)
+     ============================================================ */
+  --topbar-height:      56px;
+  --sidebar-width:      220px;
+  --content-max-width:  1400px;
+  --content-padding:    24px;
+  --card-radius:        8px;
+  --section-gap:        24px;
+
+  /* ============================================================
+     11. 컴포넌트 토큰 — 버튼 (Button Tokens)
+     ============================================================ */
+  --btn-primary-bg:       #003087;
+  --btn-primary-text:     #FFFFFF;
+  --btn-primary-hover-bg: #001F5B;
+  --btn-secondary-bg:     #FFFFFF;
+  --btn-secondary-text:   #003087;
+  --btn-secondary-border: #003087;
+  --btn-danger-bg:        #DC2626;
+  --btn-danger-text:      #FFFFFF;
+  --btn-warning-bg:       #D97706;
+  --btn-warning-text:     #FFFFFF;
+  --btn-disabled-bg:      #D1D5DB;
+  --btn-disabled-text:    #9CA3AF;
+
+  --btn-height-sm:    30px;
+  --btn-height-md:    36px;
+  --btn-height-lg:    40px;
+  --btn-radius:       6px;
+  --btn-font-weight:  600;
+  --btn-font-size:    14px;
+  --btn-padding-h:    16px;
+
+  /* ============================================================
+     11-2. 컴포넌트 토큰 — 테이블 (Table Tokens)
+     ============================================================ */
+  --table-header-bg:          #F8FAFC;
+  --table-header-text:        #374151;
+  --table-header-font-weight: 500;
+  --table-border:             #E2E8F0;
+  --table-row-hover:          #F0F4FC;
+  --table-row-striped:        #F9FAFB;
+  --table-row-selected:       #EBF0F8;
+  --table-cell-padding-v:     10px;
+  --table-cell-padding-h:     16px;
+  --table-font-size:          13px;
+  --table-section-header-bg:  #EFF2F7;
+
+  /* ============================================================
+     11-3. 컴포넌트 토큰 — 입력 필드 (Input Tokens)
+     ============================================================ */
+  --input-border:          #D1D5DB;
+  --input-border-focus:    #003087;
+  --input-border-error:    #EF4444;
+  --input-bg:              #FFFFFF;
+  --input-bg-disabled:     #F3F4F6;
+  --input-text:            #374151;
+  --input-text-disabled:   #9CA3AF;
+  --input-placeholder:     #6B7280;
+  --input-height:          36px;
+  --input-radius:          6px;
+  --input-padding-h:       12px;
+  --input-font-size:       14px;
+
+  /* ============================================================
+     11-4. 컴포넌트 토큰 — 배지 (Badge Tokens)
+     ============================================================ */
+  --badge-radius:       4px;
+  --badge-padding-v:    2px;
+  --badge-padding-h:    8px;
+  --badge-font-size:    12px;
+  --badge-font-weight:  600;
+  --badge-line-height:  1.3;
+
+  /* ============================================================
+     11-5. 컴포넌트 토큰 — 모달 (Modal Tokens)
+     ============================================================ */
+  --modal-bg:               #FFFFFF;
+  --modal-overlay:          rgba(0,0,0,0.45);
+  --modal-radius:           8px;
+  --modal-shadow:           0 10px 40px rgba(0,0,0,0.15);
+  --modal-header-bg:        #1B2A4A;
+  --modal-header-text:      #FFFFFF;
+  --modal-padding:          24px;
+  --modal-header-padding-v: 16px;
+  --modal-header-padding-h: 24px;
+  --modal-width-sm:         480px;
+  --modal-width-md:         520px;
+  --modal-width-lg:         900px;
+  --modal-max-height:       90vh;
+
+  /* ============================================================
+     11-6. 컴포넌트 토큰 — 사이드바 탭 (Sidebar Tab Tokens)
+     ============================================================ */
+  --tab-active-bg:          #EBF0F8;
+  --tab-active-text:        #003087;
+  --tab-hover-bg:           #F5F7FA;
+  --tab-text:               #374151;
+  --tab-height:             44px;
+  --tab-padding-h:          20px;
+  --tab-font-size:          15px;
+  --tab-font-weight:        500;
+  --tab-active-font-weight: 600;
+
+  /* ============================================================
+     11-7. 컴포넌트 토큰 — 페이지네이션 (Pagination Tokens)
+     ============================================================ */
+  --pagination-text:        #6B7280;
+  --pagination-active-bg:   #003087;
+  --pagination-active-text: #FFFFFF;
+  --pagination-hover-bg:    #F5F7FA;
+  --pagination-border:      #D1D5DB;
+  --pagination-height:      32px;
+  --pagination-radius:      4px;
+
+  /* ============================================================
+     11-8. 컴포넌트 토큰 — 역할 배지 (Role Badge Tokens)
+     ============================================================ */
+  --role-badge-adm-bg:    #003087;
+  --role-badge-adm-text:  #FFFFFF;
+  --role-badge-staff-bg:  #0A7EA4;
+  --role-badge-staff-text:#FFFFFF;
+  --role-badge-asst-bg:   #6B7280;
+  --role-badge-asst-text: #FFFFFF;
+
+  /* ============================================================
+     11-9. 컴포넌트 토큰 — 프로그레스 바 (Progress Bar Tokens)
+     ============================================================ */
+  --progress-bg:           #E2E8F0;
+  --progress-fill:         #003087;
+  --progress-fill-warning: #D97706;
+  --progress-height:       6px;
+  --progress-radius:       3px;
+
+  /* ============================================================
+     11-10. 컴포넌트 토큰 — 토스트 (Toast Tokens)
+     ============================================================ */
+  --toast-success-bg:     #ECFDF5;
+  --toast-success-border: #10B981;
+  --toast-success-text:   #047857;
+  --toast-error-bg:       #FEF2F2;
+  --toast-error-border:   #EF4444;
+  --toast-error-text:     #B91C1C;
+  --toast-warning-bg:     #FFFBEB;
+  --toast-warning-border: #F59E0B;
+  --toast-warning-text:   #92400E;
+  --toast-shadow:         0 4px 16px rgba(0,0,0,0.14);
+  --toast-radius:         6px;
+
+  /* ============================================================
+     11-11. 컴포넌트 토큰 — 툴팁 (Tooltip Tokens)
+     ============================================================ */
+  --tooltip-bg:        #111827;
+  --tooltip-text:      #FFFFFF;
+  --tooltip-font-size: 12px;
+  --tooltip-radius:    4px;
+
+  /* ============================================================
+     11-12. Empty State
+     ============================================================ */
+  --empty-icon-color:  #D1D5DB;
+  --empty-text-color:  #6B7280;
+  --empty-text-size:   14px;
+}

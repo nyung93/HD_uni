@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W.H.Y 리셋학기 마일리지 관리시스템</title>
+  <link rel="stylesheet" href="_tokens.css">
+  <link rel="stylesheet" href="_layout.css">
+  <style>
+    /* 쉘 전용: iframe 영역 */
+    .shell-body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .shell-main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      margin-top: var(--topbar-height);
+    }
+
+    /* Sidebar */
+    .shell-sidebar {
+      width: var(--sidebar-width, 220px);
+      background: var(--admin-sidebar-bg);
+      border-right: 1px solid var(--admin-sidebar-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+      padding-top: var(--spacing-4);
+    }
+
+    .shell-sidebar__home {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      padding: var(--spacing-3) var(--spacing-4);
+      margin: 0 var(--spacing-3) var(--spacing-2);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .shell-sidebar__home:hover,
+    .shell-sidebar__home.is-active {
+      background: var(--admin-sidebar-active-bg);
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .shell-sidebar__label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: var(--spacing-4) var(--spacing-4) var(--spacing-2);
+    }
+
+    .shell-sidebar__nav {
+      list-style: none;
+      padding: 0 var(--spacing-3);
+    }
+
+    .shell-sidebar__nav-item {
+      margin-bottom: var(--spacing-1);
+    }
+
+    .shell-sidebar__nav-link {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-3);
+      padding: var(--spacing-2) var(--spacing-3);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--admin-sidebar-text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .shell-sidebar__nav-link:hover {
+      background: var(--admin-sidebar-active-bg);
+      color: var(--admin-sidebar-active-text);
+      text-decoration: none;
+    }
+
+    .shell-sidebar__nav-link.is-active {
+      background: var(--admin-sidebar-active-bg);
+      color: var(--admin-sidebar-active-text);
+      font-weight: var(--font-weight-semibold);
+      border-left: 3px solid var(--admin-sidebar-active-text);
+      padding-left: calc(var(--spacing-3) - 3px);
+    }
+
+    .shell-sidebar__nav-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* iframe 영역 */
+    .shell-frame-area {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .shell-frame-area iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* 홈 화면 (iframe 없이 직접 렌더) */
+    #home-section {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      background: var(--color-bg-page);
+      padding: var(--content-padding);
+    }
+
+    .home-welcome {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: var(--spacing-8) 0;
+    }
+
+    .home-welcome__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-4);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .home-welcome__logo-mark {
+      width: 56px;
+      height: 56px;
+      background: var(--admin-topbar-bg);
+      color: var(--admin-topbar-text);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -1px;
+    }
+
+    .home-welcome__title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: 1.3;
+    }
+
+    .home-welcome__subtitle {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      margin-top: var(--spacing-1);
+    }
+
+    .home-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-5);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .home-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-6);
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+      text-decoration: none;
+      display: block;
+    }
+
+    .home-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      border-color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .home-card__icon {
+      font-size: 32px;
+      margin-bottom: var(--spacing-3);
+    }
+
+    .home-card__title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-2);
+    }
+
+    .home-card__desc {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .home-card__arrow {
+      margin-top: var(--spacing-4);
+      font-size: var(--font-size-sm);
+      color: var(--color-primary);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .home-status-bar {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-4) var(--spacing-6);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-6);
+    }
+
+    .home-status-bar__label {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+
+    .home-status-bar__value {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+    }
+
+    .home-status-bar__divider {
+      width: 1px;
+      height: 32px;
+      background: var(--color-border);
+    }
+  </style>
+</head>
+<body class="shell-body">
+
+<!-- ===== TopBar ===== -->
+<header class="topbar">
+  <div class="topbar__logo" style="cursor:pointer;" onclick="navigate('home')">
+    <div class="topbar__logo-mark">WHY</div>
+    <span class="topbar__title">한동대학교 W.H.Y 리셋학기 마일리지 관리시스템</span>
+  </div>
+  <div class="topbar__right">
+    <div class="topbar__user">
+      <span class="role-badge role-badge--adm">ADM</span>
+      <span class="topbar__user-name">관리자 홍길동</span>
+    </div>
+    <button class="topbar__logout" onclick="alert('로그아웃')">로그아웃</button>
+  </div>
+</header>
+
+<!-- ===== Main (Sidebar + Content) ===== -->
+<div class="shell-main">
+
+  <!-- Sidebar -->
+  <nav class="shell-sidebar">
+    <!-- 홈 -->
+    <a class="shell-sidebar__home is-active" data-page="home" onclick="navigate('home')">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+      </svg>
+      홈
+    </a>
+
+    <span class="shell-sidebar__label">인증제 운영관리</span>
+    <ul class="shell-sidebar__nav">
+      <li class="shell-sidebar__nav-item">
+        <a class="shell-sidebar__nav-link" data-page="cert-course" onclick="navigate('cert-course')">
+          <svg class="shell-sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.694.358 3.8 1.006A7.968 7.968 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+          </svg>
+          교과영역
+        </a>
+      </li>
+      <li class="shell-sidebar__nav-item">
+        <a class="shell-sidebar__nav-link" data-page="cert-extracur" onclick="navigate('cert-extracur')">
+          <svg class="shell-sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+          </svg>
+          비교과영역
+        </a>
+      </li>
+      <li class="shell-sidebar__nav-item">
+        <a class="shell-sidebar__nav-link" data-page="cert-standard" onclick="navigate('cert-standard')">
+          <svg class="shell-sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/>
+          </svg>
+          인증기준
+        </a>
+      </li>
+    </ul>
+
+    <span class="shell-sidebar__label">대상자 관리</span>
+    <ul class="shell-sidebar__nav">
+      <li class="shell-sidebar__nav-item">
+        <a class="shell-sidebar__nav-link" data-page="target" onclick="navigate('target')">
+          <svg class="shell-sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+          </svg>
+          인증 대상자 현황
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Content Area -->
+  <div class="shell-frame-area">
+
+    <!-- 홈 화면 (iframe 없이 직접 렌더) -->
+    <div id="home-section">
+      <div class="home-welcome">
+        <div class="home-welcome__logo">
+          <div class="home-welcome__logo-mark">WHY</div>
+          <div>
+            <div class="home-welcome__title">W.H.Y 리셋학기 마일리지 관리시스템</div>
+            <div class="home-welcome__subtitle">한동대학교 역량개발 인증제 통합 운영 플랫폼</div>
+          </div>
+        </div>
+
+        <!-- 인증현황 요약 -->
+        <div class="home-status-bar" style="margin-bottom: var(--spacing-8);">
+          <div>
+            <div class="home-status-bar__label">기준년도</div>
+            <div class="home-status-bar__value">2025년</div>
+          </div>
+          <div class="home-status-bar__divider"></div>
+          <div>
+            <div class="home-status-bar__label">전체 대상자</div>
+            <div class="home-status-bar__value">1,248명</div>
+          </div>
+          <div class="home-status-bar__divider"></div>
+          <div>
+            <div class="home-status-bar__label">인증 완료</div>
+            <div class="home-status-bar__value" style="color: var(--status-certified-text);">347명</div>
+          </div>
+          <div class="home-status-bar__divider"></div>
+          <div>
+            <div class="home-status-bar__label">인증 기준점수</div>
+            <div class="home-status-bar__value">80점</div>
+          </div>
+          <div class="home-status-bar__divider"></div>
+          <div>
+            <div class="home-status-bar__label">재계산 상태</div>
+            <div class="home-status-bar__value" style="color: var(--status-certified-text); font-size: var(--font-size-base);">최신</div>
+          </div>
+        </div>
+
+        <!-- 바로가기 카드 -->
+        <div class="home-card-grid">
+          <a class="home-card" onclick="navigate('cert-course')">
+            <div class="home-card__icon">📚</div>
+            <div class="home-card__title">교과영역 관리</div>
+            <div class="home-card__desc">교과목을 5개 컴패스 영역에 매핑하고 인증 대상 여부를 설정합니다.</div>
+            <div class="home-card__arrow">바로가기 →</div>
+          </a>
+          <a class="home-card" onclick="navigate('cert-extracur')">
+            <div class="home-card__icon">📋</div>
+            <div class="home-card__title">비교과영역 조회</div>
+            <div class="home-card__desc">비교과 활동별 배점 현황을 영역별로 조회합니다. (조회 전용)</div>
+            <div class="home-card__arrow">바로가기 →</div>
+          </a>
+          <a class="home-card" onclick="navigate('cert-standard')">
+            <div class="home-card__icon">📊</div>
+            <div class="home-card__title">인증기준 설정</div>
+            <div class="home-card__desc">인증 총점 기준과 영역별 배점표를 관리합니다. LKD 잠금 상태를 확인합니다.</div>
+            <div class="home-card__arrow">바로가기 →</div>
+          </a>
+          <a class="home-card" onclick="navigate('target')">
+            <div class="home-card__icon">👥</div>
+            <div class="home-card__title">인증 대상자 현황</div>
+            <div class="home-card__desc">대상자 마일리지 현황을 조회하고 스냅샷 저장 및 재계산을 실행합니다.</div>
+            <div class="home-card__arrow">바로가기 →</div>
+          </a>
+        </div>
+
+        <!-- 5개 컴패스 영역 안내 -->
+        <div style="display:flex; gap: var(--spacing-3); flex-wrap: wrap;">
+          <span style="display:inline-flex; align-items:center; gap:var(--spacing-2); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-full); background: var(--compass-academic-bg); color: var(--compass-academic-text); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">
+            Academic
+          </span>
+          <span style="display:inline-flex; align-items:center; gap:var(--spacing-2); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-full); background: var(--compass-learning-bg); color: var(--compass-learning-text); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">
+            Learning
+          </span>
+          <span style="display:inline-flex; align-items:center; gap:var(--spacing-2); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-full); background: var(--compass-spiritual-bg); color: var(--compass-spiritual-text); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">
+            Spiritual
+          </span>
+          <span style="display:inline-flex; align-items:center; gap:var(--spacing-2); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-full); background: var(--compass-service-bg); color: var(--compass-service-text); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">
+            Service
+          </span>
+          <span style="display:inline-flex; align-items:center; gap:var(--spacing-2); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-full); background: var(--compass-knowing-bg); color: var(--compass-knowing-text); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">
+            Knowing
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- iframe (홈 제외 나머지 페이지용) -->
+    <iframe id="content-frame" src="" style="display:none;"></iframe>
+
+  </div>
+</div>
+
+<script>
+  const PAGE_SRCS = {
+    'cert-course': 'cert-course.html',
+    'cert-extracur': 'cert-extracur.html',
+    'cert-standard': 'cert-standard.html',
+    'target': 'target.html',
+  };
+
+  function navigate(page) {
+    // 사이드바 active 상태 업데이트
+    document.querySelectorAll('[data-page]').forEach(el => {
+      el.classList.remove('is-active');
+    });
+    const activeEl = document.querySelector(`[data-page="${page}"]`);
+    if (activeEl) activeEl.classList.add('is-active');
+
+    const homeSection = document.getElementById('home-section');
+    const frame = document.getElementById('content-frame');
+
+    if (page === 'home') {
+      homeSection.style.display = 'block';
+      frame.style.display = 'none';
+    } else {
+      homeSection.style.display = 'none';
+      frame.style.display = 'block';
+      const src = PAGE_SRCS[page];
+      if (src && frame.getAttribute('data-current') !== page) {
+        frame.src = src + '?embedded=1';
+        frame.setAttribute('data-current', page);
+      }
+    }
+
+    // URL hash 업데이트
+    location.hash = page;
+  }
+
+  // 초기 화면: hash 기반
+  window.addEventListener('load', () => {
+    const hash = location.hash.replace('#', '') || 'home';
+    navigate(hash);
+  });
+</script>
+
+</body>
+</html>

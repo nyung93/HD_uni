@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인증기준 관리 — W.H.Y 리셋학기 마일리지 관리시스템</title>
+  <link rel="stylesheet" href="_tokens.css">
+  <link rel="stylesheet" href="_layout.css">
+  <style>
+    .is-embedded .topbar,
+    .is-embedded .sidebar { display: none !important; }
+    .is-embedded .content {
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<script>
+  if (window !== window.parent || new URLSearchParams(location.search).get('embedded') === '1') {
+    document.documentElement.classList.add('is-embedded');
+  }
+</script>
+
+<!-- ===== TopBar ===== -->
+<header class="topbar">
+  <div class="topbar__logo">
+    <div class="topbar__logo-mark">WHY</div>
+    <span class="topbar__title">한동대학교 W.H.Y 리셋학기 마일리지 관리시스템</span>
+  </div>
+  <div class="topbar__right">
+    <div class="topbar__user">
+      <span class="role-badge role-badge--adm">ADM</span>
+      <span class="topbar__user-name">관리자 홍길동</span>
+    </div>
+    <button class="topbar__logout" onclick="alert('로그아웃')">로그아웃</button>
+  </div>
+</header>
+
+<!-- ===== Sidebar ===== -->
+<nav class="sidebar">
+  <a href="index.html" class="sidebar__nav-link" style="display:flex; align-items:center; gap:8px; padding: 10px 16px; margin: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--color-text-secondary);">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+    홈
+  </a>
+  <span class="sidebar__section-label">인증제 운영관리</span>
+  <ul class="sidebar__nav">
+    <li class="sidebar__nav-item">
+      <a href="cert-course.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.694.358 3.8 1.006A7.968 7.968 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+        </svg>
+        교과영역
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="cert-extracur.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+        </svg>
+        비교과영역
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="cert-standard.html" class="sidebar__nav-link is-active">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/>
+        </svg>
+        인증기준
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="target.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+        </svg>
+        대상자 관리
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- ===== Main Content ===== -->
+<main class="content">
+
+  <!-- 페이지 헤더 -->
+  <div class="page-header">
+    <h1 class="page-title">인증기준 관리</h1>
+  </div>
+
+  <!-- ===== 섹션 1: 인증기준 목록 ===== -->
+  <div class="card section-gap">
+    <div class="card__header">
+      <h2 class="section-title">인증기준 목록</h2>
+      <div class="flex-center gap-3">
+        <select class="form-select" style="width: 100px;">
+          <option>2025</option>
+          <option>2024</option>
+          <option>2023</option>
+        </select>
+        <button class="btn btn--primary" onclick="alert('인증기준 등록 모달 (ADM 전용)')">인증기준 등록</button>
+      </div>
+    </div>
+    <div class="table-wrapper" style="border: none; border-radius: 0;">
+      <table class="table table--no-stripe">
+        <thead>
+          <tr>
+            <th style="width: 100px;" class="center">기준년도</th>
+            <th>제목</th>
+            <th style="width: 120px;" class="center">인증기준점수</th>
+            <th style="width: 100px;" class="center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center">
+              <span class="flex-center gap-2" style="justify-content: center;">
+                2025
+                <span title="인증이력 있음: 기준년도 변경 불가" style="color: var(--status-locked-text); cursor: help;">&#128274;</span>
+              </span>
+            </td>
+            <td><strong>2025 리셋학기 인증</strong></td>
+            <td class="center"><strong style="color: var(--color-primary);">60점</strong> 이상</td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="alert('행 인라인 수정 모드: 제목·인증기준점수만 수정 가능')">수정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2024</td>
+            <td>2024 리셋학기 인증</td>
+            <td class="center">55점 이상</td>
+            <td class="center"><button class="btn btn--secondary btn--sm" onclick="alert('행 인라인 수정 모드')">수정</button></td>
+          </tr>
+          <tr>
+            <td class="center">2023</td>
+            <td>2023 리셋학기 인증 (파일럿)</td>
+            <td class="center">50점 이상</td>
+            <td class="center"><button class="btn btn--secondary btn--sm">수정</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 구분선 ===== -->
+  <hr class="divider">
+
+  <!-- ===== 섹션 2: 전체 인증배점표 ===== -->
+  <div class="flex-between mb-4">
+    <h2 class="section-title">전체 인증배점표</h2>
+    <select class="form-select" style="width: 100px;">
+      <option>2025</option>
+      <option>2024</option>
+    </select>
+  </div>
+
+  <!-- ACADEMIC 영역 -->
+  <div class="card section-gap">
+    <div class="table-wrapper" style="border: none; border-radius: 0;">
+      <table class="table table--no-stripe">
+        <thead>
+          <tr>
+            <th style="width: 110px;">영역</th>
+            <th style="width: 180px;">활동명</th>
+            <th style="width: 80px;" class="center">배점</th>
+            <th style="width: 100px;" class="center">최대횟수/년</th>
+            <th style="width: 80px;" class="center">잠금상태</th>
+            <th style="width: 120px;" class="center">관리</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-header">
+            <td colspan="6">
+              <span class="badge badge--academic">ACADEMIC</span>
+              <span style="margin-left: var(--spacing-2); color: var(--compass-academic-text);">교과 학습 영역</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--academic-light" style="font-size: var(--font-size-xs);">ACADEMIC</span></td>
+            <td>기독교세계관</td>
+            <td class="center">10점</td>
+            <td class="center">4회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('기독교세계관', 'academic', 10, 4, false)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--academic-light" style="font-size: var(--font-size-xs);">ACADEMIC</span></td>
+            <td>전공기초실습</td>
+            <td class="center" style="color: var(--status-locked-text);">
+              12점 <span title="잠금: 당해년도 인증이력 있음">&#128274;</span>
+            </td>
+            <td class="center" style="color: var(--status-locked-text);">
+              2회 <span title="잠금: 당해년도 인증이력 있음">&#128274;</span>
+            </td>
+            <td class="center">
+              <span class="badge badge--locked" style="font-size: var(--font-size-xs);">잠금</span>
+            </td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('전공기초실습', 'academic', 12, 2, true)">인증기준설정</button>
+            </td>
+          </tr>
+
+          <tr class="section-header">
+            <td colspan="6">
+              <span class="badge badge--learning">LEARNING</span>
+              <span style="margin-left: var(--spacing-2); color: var(--compass-learning-text);">자기학습 영역</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--learning-light" style="font-size: var(--font-size-xs);">LEARNING</span></td>
+            <td>소프트웨어개발</td>
+            <td class="center">8점</td>
+            <td class="center">무제한</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('소프트웨어개발', 'learning', 8, 0, false)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--learning-light" style="font-size: var(--font-size-xs);">LEARNING</span></td>
+            <td>독서</td>
+            <td class="center">10점</td>
+            <td class="center">4회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('독서', 'learning', 10, 4, false)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--learning-light" style="font-size: var(--font-size-xs);">LEARNING</span></td>
+            <td>글쓰기</td>
+            <td class="center">5점</td>
+            <td class="center">4회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('글쓰기', 'learning', 5, 4, false)">인증기준설정</button>
+            </td>
+          </tr>
+
+          <tr class="section-header">
+            <td colspan="6">
+              <span class="badge badge--spiritual">SPIRITUAL</span>
+              <span style="margin-left: var(--spacing-2); color: var(--compass-spiritual-text);">영성 영역</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--spiritual-light" style="font-size: var(--font-size-xs);">SPIRITUAL</span></td>
+            <td>수련회참가</td>
+            <td class="center" style="color: var(--status-locked-text);">
+              20점 <span title="잠금: 당해년도 인증이력 있음">&#128274;</span>
+            </td>
+            <td class="center" style="color: var(--status-locked-text);">
+              1회 <span title="잠금: 당해년도 인증이력 있음">&#128274;</span>
+            </td>
+            <td class="center">
+              <span class="badge badge--locked" style="font-size: var(--font-size-xs);">잠금</span>
+            </td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('수련회참가', 'spiritual', 20, 1, true)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--spiritual-light" style="font-size: var(--font-size-xs);">SPIRITUAL</span></td>
+            <td>경건의시간</td>
+            <td class="center">5점</td>
+            <td class="center">4회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('경건의시간', 'spiritual', 5, 4, false)">인증기준설정</button>
+            </td>
+          </tr>
+
+          <tr class="section-header">
+            <td colspan="6">
+              <span class="badge badge--service">SERVICE</span>
+              <span style="margin-left: var(--spacing-2); color: var(--compass-service-text);">봉사 영역</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--service-light" style="font-size: var(--font-size-xs);">SERVICE</span></td>
+            <td>현장봉사</td>
+            <td class="center" style="color: var(--status-locked-text);">
+              12점 <span title="잠금: 당해년도 인증이력 있음">&#128274;</span>
+            </td>
+            <td class="center" style="color: var(--status-locked-text);">
+              2회 <span title="잠금: 당해년도 인증이력 있음">&#128274;</span>
+            </td>
+            <td class="center">
+              <span class="badge badge--locked" style="font-size: var(--font-size-xs);">잠금</span>
+            </td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('현장봉사', 'service', 12, 2, true)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--service-light" style="font-size: var(--font-size-xs);">SERVICE</span></td>
+            <td>지역봉사</td>
+            <td class="center">10점</td>
+            <td class="center">2회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('지역봉사', 'service', 10, 2, false)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--service-light" style="font-size: var(--font-size-xs);">SERVICE</span></td>
+            <td>해외봉사</td>
+            <td class="center">25점</td>
+            <td class="center">1회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('해외봉사', 'service', 25, 1, false)">인증기준설정</button>
+            </td>
+          </tr>
+
+          <tr class="section-header">
+            <td colspan="6">
+              <span class="badge badge--knowing">KNOWING</span>
+              <span style="margin-left: var(--spacing-2); color: var(--compass-knowing-text);">자기이해 영역</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--knowing-light" style="font-size: var(--font-size-xs);">KNOWING</span></td>
+            <td>진로탐색</td>
+            <td class="center">8점</td>
+            <td class="center">4회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('진로탐색', 'knowing', 8, 4, false)">인증기준설정</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="badge badge--knowing-light" style="font-size: var(--font-size-xs);">KNOWING</span></td>
+            <td>자기이해</td>
+            <td class="center">5점</td>
+            <td class="center">4회</td>
+            <td class="center"><span class="text-muted text-sm">—</span></td>
+            <td class="center">
+              <button class="btn btn--secondary btn--sm" onclick="openStandardModal('자기이해', 'knowing', 5, 4, false)">인증기준설정</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===================================================
+     모달: 인증기준 설정 팝업 (WF-CERT-005)
+     =================================================== -->
+<div class="modal-overlay" id="standardModalOverlay">
+  <div class="modal modal--md">
+    <header class="modal__header">
+      <span class="modal__title">인증기준 설정</span>
+      <button class="modal__close" onclick="closeStandardModal()" aria-label="닫기">&times;</button>
+    </header>
+    <div class="modal__body">
+
+      <!-- 상태 배지 -->
+      <div id="stdStatusBadge" class="mb-4"></div>
+
+      <!-- 안내 문구 -->
+      <div id="stdGuidance" class="mb-4"></div>
+
+      <!-- 영역 Select -->
+      <div class="modal-form-row">
+        <label class="form-label form-label--required">컴패스 영역</label>
+        <select class="form-select" id="stdCompassSel">
+          <option value="">선택해주세요</option>
+          <option value="academic">Academic</option>
+          <option value="learning">Learning</option>
+          <option value="spiritual">Spiritual</option>
+          <option value="service">Service</option>
+          <option value="knowing">Knowing</option>
+        </select>
+      </div>
+
+      <!-- 활동명 -->
+      <div class="modal-form-row">
+        <label class="form-label form-label--required">활동명</label>
+        <input type="text" class="form-input" id="stdActNm" placeholder="활동명을 입력해주세요">
+      </div>
+
+      <!-- 배점 -->
+      <div class="modal-form-row">
+        <label class="form-label form-label--required">배점</label>
+        <div class="locked-field">
+          <input type="number" class="form-input" id="stdPts" placeholder="양의 정수 입력" min="1">
+          <span class="locked-field__icon" id="stdPtsLock" style="display:none;">&#128274;</span>
+        </div>
+      </div>
+
+      <!-- 최대횟수 -->
+      <div class="modal-form-row">
+        <label class="form-label form-label--required">최대횟수/년</label>
+        <div class="locked-field">
+          <input type="number" class="form-input" id="stdMaxCnt" placeholder="0 입력 시 무제한" min="0">
+          <span class="locked-field__icon" id="stdMaxCntLock" style="display:none;">&#128274;</span>
+        </div>
+      </div>
+
+    </div>
+    <footer class="modal__footer">
+      <button class="btn btn--secondary" onclick="closeStandardModal()">취소</button>
+      <button class="btn btn--primary" onclick="saveStandardModal()">저장</button>
+    </footer>
+  </div>
+</div>
+
+<script>
+  function openStandardModal(actNm, compass, pts, maxCnt, isLocked) {
+    // 상태 배지
+    var badgeEl = document.getElementById('stdStatusBadge');
+    var guidanceEl = document.getElementById('stdGuidance');
+
+    if (isLocked) {
+      badgeEl.innerHTML = '<span class="badge badge--locked">당해년도 인증이력 있음</span>';
+      guidanceEl.innerHTML = '<div class="error-banner">&#128274; 당해년도에 이 활동명으로 인증된 학생이 있어 배점·최대횟수는 수정할 수 없습니다. (영역·활동명만 수정 가능)</div>';
+    } else {
+      badgeEl.innerHTML = '<span class="badge badge--new">신규 등록 / 이력 없음</span>';
+      guidanceEl.innerHTML = '<div class="info-banner">&#8505; 교과·비교과 상관없이 활동명을 신규 등록하거나 기존 값을 자유롭게 수정할 수 있습니다.</div>';
+    }
+
+    // 영역 선택
+    document.getElementById('stdCompassSel').value = compass;
+
+    // 활동명
+    document.getElementById('stdActNm').value = actNm;
+
+    // 배점
+    var ptsInput = document.getElementById('stdPts');
+    var ptsLock = document.getElementById('stdPtsLock');
+    ptsInput.value = pts;
+    ptsInput.disabled = isLocked;
+    ptsInput.style.background = isLocked ? 'var(--input-bg-disabled)' : 'var(--input-bg)';
+    ptsInput.style.color = isLocked ? 'var(--input-text-disabled)' : 'var(--input-text)';
+    ptsLock.style.display = isLocked ? 'block' : 'none';
+
+    // 최대횟수
+    var maxInput = document.getElementById('stdMaxCnt');
+    var maxLock = document.getElementById('stdMaxCntLock');
+    maxInput.value = maxCnt;
+    maxInput.disabled = isLocked;
+    maxInput.style.background = isLocked ? 'var(--input-bg-disabled)' : 'var(--input-bg)';
+    maxInput.style.color = isLocked ? 'var(--input-text-disabled)' : 'var(--input-text)';
+    maxLock.style.display = isLocked ? 'block' : 'none';
+
+    document.getElementById('standardModalOverlay').classList.add('is-open');
+  }
+
+  function closeStandardModal() {
+    document.getElementById('standardModalOverlay').classList.remove('is-open');
+  }
+
+  function saveStandardModal() {
+    var compass = document.getElementById('stdCompassSel').value;
+    var actNm = document.getElementById('stdActNm').value.trim();
+    var pts = document.getElementById('stdPts').value;
+
+    if (!compass) { alert('컴패스 영역을 선택해주세요.'); return; }
+    if (!actNm)   { alert('활동명을 입력해주세요.'); return; }
+    if (!document.getElementById('stdPts').disabled && (!pts || parseInt(pts) < 1)) {
+      alert('배점은 1 이상의 양의 정수를 입력해주세요.'); return;
+    }
+    alert('저장 완료: ' + compass + ' — ' + actNm + ' (' + pts + '점)');
+    closeStandardModal();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeStandardModal();
+  });
+</script>
+
+</body>
+</html>

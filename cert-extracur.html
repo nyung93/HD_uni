@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비교과영역 조회 — W.H.Y 리셋학기 마일리지 관리시스템</title>
+  <link rel="stylesheet" href="_tokens.css">
+  <link rel="stylesheet" href="_layout.css">
+  <style>
+    .is-embedded .topbar,
+    .is-embedded .sidebar { display: none !important; }
+    .is-embedded .content {
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<script>
+  if (window !== window.parent || new URLSearchParams(location.search).get('embedded') === '1') {
+    document.documentElement.classList.add('is-embedded');
+  }
+</script>
+
+<!-- ===== TopBar ===== -->
+<header class="topbar">
+  <div class="topbar__logo">
+    <div class="topbar__logo-mark">WHY</div>
+    <span class="topbar__title">한동대학교 W.H.Y 리셋학기 마일리지 관리시스템</span>
+  </div>
+  <div class="topbar__right">
+    <div class="topbar__user">
+      <span class="role-badge role-badge--adm">ADM</span>
+      <span class="topbar__user-name">관리자 홍길동</span>
+    </div>
+    <button class="topbar__logout" onclick="alert('로그아웃')">로그아웃</button>
+  </div>
+</header>
+
+<!-- ===== Sidebar ===== -->
+<nav class="sidebar">
+  <a href="index.html" class="sidebar__nav-link" style="display:flex; align-items:center; gap:8px; padding: 10px 16px; margin: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--color-text-secondary);">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+    홈
+  </a>
+  <span class="sidebar__section-label">인증제 운영관리</span>
+  <ul class="sidebar__nav">
+    <li class="sidebar__nav-item">
+      <a href="cert-course.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.694.358 3.8 1.006A7.968 7.968 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+        </svg>
+        교과영역
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="cert-extracur.html" class="sidebar__nav-link is-active">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+        </svg>
+        비교과영역
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="cert-standard.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/>
+        </svg>
+        인증기준
+      </a>
+    </li>
+    <li class="sidebar__nav-item">
+      <a href="target.html" class="sidebar__nav-link">
+        <svg class="sidebar__nav-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+        </svg>
+        대상자 관리
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- ===== Main Content ===== -->
+<main class="content">
+
+  <!-- 페이지 헤더 -->
+  <div class="flex-between mb-6">
+    <div>
+      <h1 class="page-title">비교과영역 조회</h1>
+      <p class="page-subtitle">영역별 비교과 활동 배점 현황 (조회 전용)</p>
+    </div>
+    <div class="flex-center gap-3">
+      <span class="badge badge--view-only" style="font-size: var(--font-size-sm); padding: var(--spacing-2) var(--spacing-3);">
+        &#128274; 조회 전용
+      </span>
+    </div>
+  </div>
+
+  <!-- 조회 조건 + 안내 -->
+  <div class="card section-gap">
+    <div class="card__body">
+      <div class="flex-between">
+        <div class="flex-center gap-3">
+          <div class="form-group" style="flex-direction: row; align-items: center; gap: var(--spacing-3);">
+            <label class="form-label" style="white-space: nowrap;">기준년도</label>
+            <select class="form-select" style="width: 100px;">
+              <option>2025</option>
+              <option>2024</option>
+              <option>2023</option>
+            </select>
+          </div>
+        </div>
+        <div class="info-banner" style="font-size: var(--font-size-sm);">
+          <span>&#8505;</span>
+          <span>값 수정은 <a href="cert-standard.html">인증기준 탭</a>에서 가능합니다.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LEARNING 섹션 ===== -->
+  <div class="card section-gap">
+    <div class="card__header">
+      <div class="flex-center gap-3">
+        <span class="badge badge--learning" style="font-size: var(--font-size-sm);">LEARNING</span>
+        <h2 class="section-title">학습 영역</h2>
+      </div>
+      <span class="text-sm text-muted">2개 활동</span>
+    </div>
+    <div class="table-wrapper" style="border: none; border-radius: 0;">
+      <table class="table table--no-stripe">
+        <thead>
+          <tr>
+            <th style="width: 200px;">활동명</th>
+            <th>세부내역 (프로그램/인증내역)</th>
+            <th style="width: 80px;" class="center">배점</th>
+            <th style="width: 90px;" class="center">최대횟수/년</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-learning-bg); color: var(--compass-learning-text);">
+              <strong>독서 활동</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>독서</td>
+            <td>독서클럽 참여, 개인독서 인증</td>
+            <td class="center"><strong>10</strong>점</td>
+            <td class="center">4회</td>
+          </tr>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-learning-bg); color: var(--compass-learning-text);">
+              <strong>글쓰기 활동</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>글쓰기</td>
+            <td>글쓰기 특강, 에세이 제출</td>
+            <td class="center"><strong>5</strong>점</td>
+            <td class="center">4회</td>
+          </tr>
+          <tr>
+            <td>소프트웨어개발</td>
+            <td>해커톤 참가, 프로젝트 완료</td>
+            <td class="center"><strong>8</strong>점</td>
+            <td class="center">무제한</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== SPIRITUAL 섹션 ===== -->
+  <div class="card section-gap">
+    <div class="card__header">
+      <div class="flex-center gap-3">
+        <span class="badge badge--spiritual" style="font-size: var(--font-size-sm);">SPIRITUAL</span>
+        <h2 class="section-title">영성 영역</h2>
+      </div>
+      <span class="text-sm text-muted">2개 활동</span>
+    </div>
+    <div class="table-wrapper" style="border: none; border-radius: 0;">
+      <table class="table table--no-stripe">
+        <thead>
+          <tr>
+            <th style="width: 200px;">활동명</th>
+            <th>세부내역 (프로그램/인증내역)</th>
+            <th style="width: 80px;" class="center">배점</th>
+            <th style="width: 90px;" class="center">최대횟수/년</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-spiritual-bg); color: var(--compass-spiritual-text);">
+              <strong>수련회 참가</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>수련회참가</td>
+            <td>봄 수련회, 가을 수련회 참가</td>
+            <td class="center"><strong>20</strong>점</td>
+            <td class="center">1회</td>
+          </tr>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-spiritual-bg); color: var(--compass-spiritual-text);">
+              <strong>경건 생활</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>경건의시간</td>
+            <td>개인 경건회, QT 기록 제출</td>
+            <td class="center"><strong>5</strong>점</td>
+            <td class="center">4회</td>
+          </tr>
+          <tr>
+            <td>침묵수련회</td>
+            <td>침묵수련회 참가 인증</td>
+            <td class="center"><strong>15</strong>점</td>
+            <td class="center">2회</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== SERVICE 섹션 ===== -->
+  <div class="card section-gap">
+    <div class="card__header">
+      <div class="flex-center gap-3">
+        <span class="badge badge--service" style="font-size: var(--font-size-sm);">SERVICE</span>
+        <h2 class="section-title">봉사 영역</h2>
+      </div>
+      <span class="text-sm text-muted">2개 활동</span>
+    </div>
+    <div class="table-wrapper" style="border: none; border-radius: 0;">
+      <table class="table table--no-stripe">
+        <thead>
+          <tr>
+            <th style="width: 200px;">활동명</th>
+            <th>세부내역 (프로그램/인증내역)</th>
+            <th style="width: 80px;" class="center">배점</th>
+            <th style="width: 90px;" class="center">최대횟수/년</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-service-bg); color: var(--compass-service-text);">
+              <strong>지역 봉사</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>지역봉사</td>
+            <td>한동봉사단 활동, 지역사회 봉사</td>
+            <td class="center"><strong>15</strong>점</td>
+            <td class="center">2회</td>
+          </tr>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-service-bg); color: var(--compass-service-text);">
+              <strong>해외 봉사</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>해외봉사</td>
+            <td>단기선교, 해외봉사활동 인증</td>
+            <td class="center"><strong>25</strong>점</td>
+            <td class="center">1회</td>
+          </tr>
+          <tr>
+            <td>현장봉사</td>
+            <td>현장 봉사활동 참가 인증</td>
+            <td class="center"><strong>12</strong>점</td>
+            <td class="center">2회</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== KNOWING 섹션 ===== -->
+  <div class="card section-gap">
+    <div class="card__header">
+      <div class="flex-center gap-3">
+        <span class="badge badge--knowing" style="font-size: var(--font-size-sm);">KNOWING</span>
+        <h2 class="section-title">자기이해 영역</h2>
+      </div>
+      <span class="text-sm text-muted">2개 활동</span>
+    </div>
+    <div class="table-wrapper" style="border: none; border-radius: 0;">
+      <table class="table table--no-stripe">
+        <thead>
+          <tr>
+            <th style="width: 200px;">활동명</th>
+            <th>세부내역 (프로그램/인증내역)</th>
+            <th style="width: 80px;" class="center">배점</th>
+            <th style="width: 90px;" class="center">최대횟수/년</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-knowing-bg); color: var(--compass-knowing-text);">
+              <strong>진로 탐색</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>진로탐색</td>
+            <td>진로 특강, 직업 탐방 프로그램</td>
+            <td class="center"><strong>8</strong>점</td>
+            <td class="center">4회</td>
+          </tr>
+          <tr>
+            <td>진로특강</td>
+            <td>취업역량 강화 특강, 취업캠프</td>
+            <td class="center"><strong>5</strong>점</td>
+            <td class="center">4회</td>
+          </tr>
+          <tr class="section-header">
+            <td colspan="4" style="background: var(--compass-knowing-bg); color: var(--compass-knowing-text);">
+              <strong>자기 이해</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>자기이해</td>
+            <td>심리검사 수검, MBTI 프로그램</td>
+            <td class="center"><strong>5</strong>점</td>
+            <td class="center">4회</td>
+          </tr>
+          <tr>
+            <td>진로적성검사</td>
+            <td>진로적성검사 수검 인증</td>
+            <td class="center"><strong>5</strong>점</td>
+            <td class="center">2회</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 하단 안내 -->
+  <div class="info-banner">
+    <span>&#8505;</span>
+    <span>비교과영역은 조회 전용 화면입니다. 배점·최대횟수 수정은 <a href="cert-standard.html">인증기준 탭</a>에서 가능합니다.</span>
+  </div>
+
+</main>
+
+</body>
+</html>
